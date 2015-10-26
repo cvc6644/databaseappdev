@@ -4,9 +4,11 @@
 </head>
 <body>
 <?php
+function connect(){
    $dbhost = 'mydbinstance.caaxufewczs3.us-east-1.rds.amazonaws.com:3036';
    $dbuser = 'awsuser';
    $dbpass = 'iste43201';
+   
    $conn = mysql_connect($dbhost, $dbuser, $dbpass);
    if(! $conn )
    {
@@ -14,6 +16,7 @@
    }
    echo 'Connected successfully';
    mysql_close($conn);
+}
 ?>
 </body>
 </html>

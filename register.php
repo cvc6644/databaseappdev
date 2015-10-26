@@ -10,11 +10,38 @@
 <center>
 
 <?php
+require_once("dbException.php");
+require_once("connect.php");
 // define variables and set to empty values
-$name = $email = $addressLine1 = $addressLine2 = $city = $state = $gender = "";
-$nameErr = $emailErr = $addr1Err = $add2Err = $cityErr = $stateErr = $genderErr = "";
+$userErr = $passErr = $name = $email = $addressLine1 = $addressLine2 = $city = $state = $gender ="" ;
+$nameErr = $emailErr = $addr1Err = $add2Err = $cityErr = $stateErr = $genderErr = $dbError = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+ 
+ if (empty($_POST["username"])) {
+     $userErr = "username is required";
+   } else {
+     $name = test_input($_POST["name"]);
+     // check if name only contains letters and whitespace
+     if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
+       $nameErr = "Only letters and white space allowed"; 
+     }
+   }
+   
+    if (empty($_POST["password1"]) && empty($_POST["password2"])) {
+		$passErr = "password is required";
+	}
+	else{
+		if(!($_POST["password1"]== $_POST["password2"])){
+			$passErr = "passwords do not match";
+		}
+		else{
+			
+		}
+	}
+	
+	
+   
  if (empty($_POST["name"])) {
      $nameErr = "Name is required";
    } else {
@@ -81,6 +108,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $gender = test_input($_POST["gender"]);
    }
    
+   if($nameErr == "" && $emailErr == "" && $addr1Err == "" && $cityErr == "" && $stateErr == "" && $genderErr == "" && $userErr == "" && $passErr == ""){
+		throw new dbException('an internal error occurred not able to register at this time', 0);
+		$dbError = "an internal error occurred not able to register at this time";
+		
+   }
+   
+   
+   
   
 }
 
@@ -93,6 +128,14 @@ function test_input($data) {
 ?>
 	<h1>User Registration</h1>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
+  Username: <input type="text" name="username"/>
+   <span class="error">* <?php echo $userErr;?></span>
+   <br/><br/>
+    Password: <input type="password" name="password1"/>
+   <span class="error">* <?php echo $passErr;?></span>
+   <br/><br/>
+    Repeate password: <input type="password" name="password2"/>
+   <br/><br/>
    Name: <input type="text" name="name"/>
    <span class="error">* <?php echo $nameErr;?></span>
    <br/><br/>
@@ -119,6 +162,9 @@ function test_input($data) {
    <input type="submit" name="submit" value="Submit"/> 
    <br/>  <br/>  <br/>
    <span class = "error">* required field</span>
+   <h4 class = "error"><?php 
+	echo $dbError;
+   ?></h4>
 </form>
 </<center>
 </body>
