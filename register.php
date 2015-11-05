@@ -71,7 +71,7 @@ if($allValid){
  
 
 
-}
+} 
 
 function test_input($data) {
    $data = trim($data);
