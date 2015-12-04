@@ -4,7 +4,7 @@
 </head>
 <body>
 <?php
-function testconnect(){
+function connect(){
    $dbhost = 'mydbinstance.caaxufewczs3.us-east-1.rds.amazonaws.com';
    $dbuser = 'awsuser';
    $dbpass = 'iste43201';

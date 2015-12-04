@@ -156,7 +156,7 @@ function allOtherCheck($errKey,$input){
    echo $requiredArr["name"]?"*":"";
    echo $errArr['name'] ?></span>
    <br/><br/>
-   E-mail: <input type="text" name="email" name="email" />
+   E-mail: <input type="text" name="email" />
    <span class="error"> <?php 
    echo $requiredArr["email"]?"*":"";
    echo $errArr['email'] ?></span>
@@ -245,10 +245,8 @@ function allOtherCheck($errKey,$input){
    <input type="submit" name="submit" value="Submit"/> 
    <br/>  <br/>  <br/>
    <span class = "error">* required field</span>
-   <h4 class = "error"><?php 
-//	echo //$dbError;
-   ?></h4>
+   <h4 class = "error"></h4>
 </form>
-</<center>
+</center>
 </body>
 </html>

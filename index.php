@@ -104,11 +104,12 @@ and open the template in the editor.
             <form method="post"> 
                 Username:<input name="username" type="text"/>
                 Password:<input name="password" type="password"/>
-                <?php if($badPassword){
-                    echo "<span id='invalid'>Invalid username or Password</span>";
-                }
-?>
-                <span id="invalid">Invalid Username or Password</span>
+                <?php
+                    if($badPassword){
+                        echo "<span id='invalid'>Invalid username or Password</span>";
+                    }
+                ?>
+                <!--<span id="invalid">Invalid Username or Password</span>-->
                 <br/><input type="submit" value="Login"/>
             </form>
             <a href="register.php">New User</a>
