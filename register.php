@@ -14,6 +14,7 @@ require_once("dbException.php");
 require_once("connect.php");
 
 
+
 $errArr = array(
 		"user"=>"",
 		"pass"=>"",
@@ -64,8 +65,27 @@ foreach($inputArr as $key => &$value){
 		$allValid = false;
 }
 
-if($allValid){
-	//db query here 
+if($allValid){ //needs to be updated to prompt before submission
+	$conn = new mysqli_connect($dbhost,$dbuser,$dbpass,$dbname,$dbport); #need to edit connect.php variables
+	$sql = "SELECT uID FROM user WHERE uID = $_POST[uID]'" ; #change uID to usernme
+
+	$usernamequery = $conn ->query($sql);
+
+	if($usernamequery->num_rows != 0){
+		echo "The username is taken";
+	}
+	else{
+		$insert = "INSERT INTO user(uID,password,name,email,address,city,state,gender)
+		VALUES ('$username,'$password,'$name','$email','$address','$city','$state','$gender')";
+	
+		if($conn->query($insert) == TRUE){
+			echo "New record created successfully";
+		}
+		else{
+			echo "Error: " .$sql . "<br>" . $conn ->error;
+		}
+		$conn ->close();
+	}
 }
 
  
