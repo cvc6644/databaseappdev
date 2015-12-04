@@ -1,5 +1,6 @@
 use databaseappdev;
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS cars;
 CREATE TABLE user (
 	uID varchar(25) NOT NULL,
 	password varchar(25) NOT NULL,
@@ -15,4 +16,14 @@ LOAD DATA LOCAL INFILE 'C:/Users/Alex/Downloads/MOCK_DATA.csv'
 INTO TABLE user 
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n';
+
+/* CREATE TABLE car_reservation(
+	date,
+	time, 
+	cost int,
+	origin varchar(60),
+	destination varchar(60),
+	user_ID FOREIGN KEY REFERENCES user(uID);
+); */
+
 
