@@ -38,18 +38,19 @@ $requiredArr = array(
 		"gender"=>true
 
 );
+$inputArr = isset($inputArr)?$inputArr:array();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $inputArr = array(
-		"user"=>empty($_POST["username"])?"":allOtherCheck("user",$_POST["username"]),
+		"user"=>empty($_POST["username"])?"":allOtherCheck("user",$_POST["username"],"/^[a-zA-Z0-9]*$/",6,20,"only numbers letters and white space allowed"),
 		"pass"=>empty($_POST["password1"]) && empty($_POST["password2"])?"":passCheck($_POST["password1"],$_POST["password2"]),
-		"name"=>empty($_POST["name"])?"":allOtherCheck("name",$_POST["name"]),
+		"name"=>empty($_POST["name"])?"":allOtherCheck("name",$_POST["name"],"/^[a-zA-Z]*$/",3,35,"only letters and white space allowed"),
 		"email"=>empty($_POST["email"])?"":emailCheck($_POST["email"]),
-		"add1"=>empty($_POST["address1"])?"":allOtherCheck("add1",$_POST["address1"]),
-		"add2"=>empty($_POST["address2"])?"":allOtherCheck("add2",$_POST["address2"]),
-		"city"=>empty($_POST["city"])?"":allOtherCheck("city",$_POST["city"]),
-		"state"=>empty($_POST["state"])?"":allOtherCheck("state",$_POST["state"]),
-		"gender"=>empty($_POST["gender"])?"":allOtherCheck("gender",$_POST["gender"])
+		"add1"=>empty($_POST["address1"])?"":allOtherCheck("add1",$_POST["address1"],"/^[a-zA-Z0-9]*$/",6,254,"only numbers letters and white space allowed"),
+		"add2"=>empty($_POST["address2"])?"":$_POST["address2"],
+		"city"=>empty($_POST["city"])?"":allOtherCheck("city",$_POST["city"],"/^[a-zA-Z]*$/",3,35,"only letters and white space allowed"),
+		"state"=>empty($_POST["state"])?"":$_POST["state"],
+		"gender"=>empty($_POST["gender"])?"":$_POST["gender"]
 );
 
 
@@ -66,27 +67,10 @@ foreach($inputArr as $key => &$value){
 }
 
 if($allValid){ //needs to be updated to prompt before submission
-	$conn = new mysqli_connect($dbhost,$dbuser,$dbpass,$dbname,$dbport); #need to edit connect.php variables
-	$sql = "SELECT uID FROM user WHERE uID = $_POST[uID]'" ; #change uID to usernme
-
-	$usernamequery = $conn ->query($sql);
-
-	if($usernamequery->num_rows != 0){
-		echo "The username is taken";
-	}
-	else{
-		$insert = "INSERT INTO user(uID,password,name,email,address,city,state,gender)
-		VALUES ('$username,'$password,'$name','$email','$address','$city','$state','$gender')";
-	
-		if($conn->query($insert) == TRUE){
-			echo "New record created successfully";
-		}
-		else{
-			echo "Error: " .$sql . "<br>" . $conn ->error;
-		}
-		$conn ->close();
-	}
-}
+	insertUser($inputArr['user'],$inputArr['pass'],$inputArr['name'],$inputArr['email'],$inputArr['add1'],$inputArr['add2'],$inputArr['city'],$inputArr['state'],$inputArr['gender']);
+	  header("Location: index.php");
+ 
+ }
 
  
 
@@ -115,27 +99,33 @@ function emailCheck($email){
 	$email = test_input($email);
 	// check if e-mail address is well-formed
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-		echo "here";
+		
 		$errArr["email"] = "Invalid email format";
 		return "";
 	}
 	return $email;
 }
 
-function allOtherCheck($errKey,$input){
+function allOtherCheck($errKey,$input,$regex,$minLen,$maxLen,$errMsg){
 	global $errArr;
 	$input = test_input($input);
-	// check if name only contains letters and whitespace
-	if (!preg_match("/^[a-zA-Z ]*$/",$input)) {
-		$errArr[$errKey] = "Only letters and white space allowed";
+	if(strlen($input) > $maxLen || strlen($input) < $minLen){
+		$errArr[$errKey] = "field is too long or too short must be between $minLen and $maxLen characters";
+		return "";
+	}
+	
+	if (!preg_match($regex,$input)) {
+		$errArr[$errKey] = $errMsg;
 		return "";
 	}
 	return $input;
 }
+
+
 ?>
 	<h1>User Registration</h1>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"> 
-  Username: <input type="text" name="username"/>
+  Username: <input type="text" name="username" value="<?php echo isset($inputArr['user'])?$inputArr['user']:"";?>"/>
    <span class="error"><?php 
    echo $requiredArr["user"]?"*":"";
    echo $errArr["user"]?></span>
@@ -151,33 +141,33 @@ function allOtherCheck($errKey,$input){
      echo $errArr["pass"];
      ?></span>
    <br/><br/>
-   Name: <input type="text" name="name"/>
+   Name: <input type="text" name="name" value="<?php echo isset($inputArr['name'])?$inputArr['name']:"";?>"/>
    <span class="error"><?php 
    echo $requiredArr["name"]?"*":"";
    echo $errArr['name'] ?></span>
    <br/><br/>
-   E-mail: <input type="text" name="email" />
+   E-mail: <input type="text" name="email" value="<?php echo isset($inputArr['email'])?$inputArr['email']:"";?>" />
    <span class="error"> <?php 
    echo $requiredArr["email"]?"*":"";
    echo $errArr['email'] ?></span>
    <br/><br/>
-   Address Line 1: <input type="text" name = "address1"/>
+   Address Line 1: <input type="text" name = "address1" value="<?php echo isset($inputArr['add1'])?$inputArr['add1']:"";?>"/>
    <span class="error"><?php 
    echo $requiredArr["add1"]?"*":"";
    echo $errArr['add1']
    ?></span>
     <br/><br/>
-   Address Line 2: <input type="text" name="address2" />
+   Address Line 2: <input type="text" name="address2" value="<?php echo isset($inputArr['add2'])?$inputArr['add2']:"";?>" />
    <span class="error"> <?php 
    echo $requiredArr["add2"]?"*":"";
    echo $errArr['add2'] ?></span>
    <br/><br/>
-   City: <input type="text"  name="city"/>
+   City: <input type="text"  name="city" value="<?php echo isset($inputArr['city'])?$inputArr['city']:"";?>"/>
    <span class="error"> <?php 
    echo $requiredArr["city"]?"*":"";
    echo $errArr['city'] ?></span>
    <br/><br/>
-   State: <select name="state">
+   State: <select name="state" value="<?php echo isset($inputArr['state'])?$inputArr['state']:"";?>">
   <option value="AL">AL</option>
 	<option value="AK">AK</option>
 	<option value="AZ">AZ</option>
@@ -236,8 +226,8 @@ function allOtherCheck($errKey,$input){
    echo $errArr['state'] ?></span>
    <br/><br/>
    Gender:
-   <input type="radio" name="gender"  value="female"/>Female
-   <input type="radio" name="gender" value="male"/>Male
+   <input type="radio" name="gender"  value="F"/>Female
+   <input type="radio" name="gender" value="M"/>Male
    <span class="error"> <?php 
    echo $requiredArr["gender"]?"*":"";
    echo $errArr['gender'] ?></span>

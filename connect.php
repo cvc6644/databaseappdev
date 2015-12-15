@@ -14,7 +14,7 @@ function connect(){
    {
      die('Could not connect: ' . $conn->connect_error);
    }
-   echo 'Connected successfully';
+
    return $conn;
 }
 function validatePassword($username, $password){
@@ -43,6 +43,29 @@ function validatePassword($username, $password){
 function close($connection){
     $connection->close();
 }
+
+function insertUser($uName,$pass,$name,$email,$add1,$add2,$city,$state,$gender){
+	$connection = connect();
+    $stmt = $connection->prepare("select uID from user where uID=?");
+    $stmt->bind_param("s", $unName);
+    $stmt->execute();
+    $cnt = $stmt->num_rows;
+	close($connection);
+	if($cnt!=0){
+		echo "<span class='error'> username exsists please choose another</span>";
+	}
+	else{
+		$connection = connect();
+		$stmt = $connection->prepare("insert into user (uID,password,name,email,city,state,gender,add1,add2) values (?,?,?,?,?,?,?,?,?)");
+		
+		$stmt->bind_param("sssssssss", $uName,$pass,$name,$email,$city,$state,$gender,$add1,$add2);
+		$stmt->execute();
+	}
+	
+	 close($connection);
+}
+
+
 ?>
 </body>
 </html>
