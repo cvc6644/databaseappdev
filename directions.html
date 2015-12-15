@@ -27,6 +27,17 @@
     <div id="map"></div>
 
     <script>
+funttion placeLocations(){
+
+	var marker = new google.maps.Marker({
+    map: map,
+    position: myLatLng,
+    title: 'Hello World!'
+  });
+}	
+	
+  
+  
 function initMap() {
   var origin_place_id = null;
   var destination_place_id = null;
