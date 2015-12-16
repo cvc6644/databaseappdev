@@ -17,13 +17,10 @@ INTO TABLE user
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n';
 
-/* CREATE TABLE car_reservation(
-	date,
-	time, 
-	cost int,
+CREATE TABLE car_reservation(
 	origin varchar(60),
 	destination varchar(60),
-	user_ID FOREIGN KEY REFERENCES user(uID);
-); */
+	day varchar(30),	
+); 
 
 

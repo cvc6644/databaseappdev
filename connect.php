@@ -5,18 +5,36 @@
 <body>
 <?php
 require 'PasswordHash.php';
-function connect(){
-   $dbhost = 'mydbinstance.caaxufewczs3.us-east-1.rds.amazonaws.com';
-   $dbuser = 'awsuser';
-   $dbpass = 'iste43201';
-   
-   $conn = new mysqli($dbhost, $dbuser, $dbpass,"databaseappdev","3306");
+$dbhost = 'mydbinstance.caaxufewczs3.us-east-1.rds.amazonaws.com';
+$dbuser = 'awsuser';
+$dbpass = 'iste43201';
+$cardb = 'carpool';
+function connect(){   
+   $conn = new mysqli($dbhost, $dbuser, $dbpass,"users","3306");
    if($conn->connect_error )
    {
      die('Could not connect: ' . $conn->connect_error);
    }
 
    return $conn;
+}
+function carConnect(){
+	$conn = new mysqli($dbhost, $dbuser, $dbpass,"carpool","3306");
+	if($conn->connect_error )
+   {
+     die('Could not connect: ' . $conn->connect_error);
+   }
+
+   return $conn;
+}
+
+function carConnect(){
+   $conn = new mysql_connect($dbhost, $dbuser, $dbpass);
+   if(!conn)
+   {
+     die('Could not connect: ' . mysql_error());
+   }
+   
 }
 function validatePassword($username, $password){
     $connection = connect();
