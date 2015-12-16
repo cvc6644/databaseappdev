@@ -4,6 +4,7 @@
     require "connect.php";
     if(!empty($_POST)){
         if(validatePassword($_POST["username"], $_POST["password"])){
+            $_SESSION['uname']= $_POST["username"];
             header("Location: "."http://".$_SERVER['HTTP_HOST']."directions.html");
             exit();
                     

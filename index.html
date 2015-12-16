@@ -6,7 +6,8 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+     <title>TODO supply a title</title>
+      <!--  
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
@@ -72,9 +73,11 @@ and open the template in the editor.
                 color: #ffffff;
             }
             
-        </style>
+        </style>-->
+     
     </head>
     <body>
+        <!--
         <div id="header" class="hf"><h1>Let's Ride!</h1>
             <h5>Getting you to where you need to go.</h5></div>
         <div id="left">
@@ -98,6 +101,22 @@ and open the template in the editor.
             </ul>
         </div>
         <div id="bottom" class="hf"><footer> created by Chase Caynoski, Alex Parkes, and Maxwell Sweikert</div>
+        -->
         
+        <form method="post">
+            <script type="text/javascript">
+                function getCurrentDate(){
+                    var currentDate= new Date();
+                    var ss = currentDate.toISOString();
+                            //ss.substring(0,ss.length()-8);
+                    document.getElementById('date').setAttribute('min',ss.substring(0,ss.length-8));
+                }
+            </script>
+            Enter Desired Date and Time: <input type="datetime-local" id="date" name="date" onclick="getCurrentDate();"><br/>
+            Enter Origin: <input type="text" name="origin"><br/>
+            Enter Destination: <input type="text" name="destination"><br/>
+            <input type="submit" value="Submit">
+    
+        </form>
     </body>
 </html>

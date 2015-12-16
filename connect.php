@@ -4,6 +4,7 @@
 </head>
 <body>
 <?php
+require 'PasswordHash.php';
 function connect(){
    $dbhost = 'mydbinstance.caaxufewczs3.us-east-1.rds.amazonaws.com';
    $dbuser = 'awsuser';
@@ -30,7 +31,7 @@ function validatePassword($username, $password){
         $stmt->bind_result($pw);
         $stmt->store_result();
         $stmt->fetch();
-        if($password == $pw){
+        if(validate_password($password, $pw)){
             return TRUE;
         }else{
             return FALSE;
@@ -56,15 +57,27 @@ function insertUser($uName,$pass,$name,$email,$add1,$add2,$city,$state,$gender){
 	}
 	else{
 		$connection = connect();
+                
 		$stmt = $connection->prepare("insert into user (uID,password,name,email,city,state,gender,add1,add2) values (?,?,?,?,?,?,?,?,?)");
 		
-		$stmt->bind_param("sssssssss", $uName,$pass,$name,$email,$city,$state,$gender,$add1,$add2);
+		$stmt->bind_param("sssssssss", $uName,  create_hash($pass),$name,$email,$city,$state,$gender,$add1,$add2);
 		$stmt->execute();
 	}
 	
 	 close($connection);
 }
-
+function addCarpool($username,$date,$origin,$destination) {
+    $connection = connect();
+    
+    $stmt = $connection->prepare("insert into Carpools (username,date,origin,destination) values (?,?,?,?)");
+    $stmt->bind_param("ssss", $username,$date,$orgin,$destination);
+    $stmt->execute();
+    if($stmt->affected_rows > 0){
+        return TRUE;
+    }else{
+        return FALSE;
+    }
+}
 
 ?>
 </body>
