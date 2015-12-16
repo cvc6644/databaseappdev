@@ -25,6 +25,17 @@
                     var ss = currentDate.toISOString();
                     document.getElementById('date').setAttribute('min',ss.substring(0,ss.length-8));
                 }
+				function getLongLat(){
+					var autocomplete = new.maps.places.Autocomplete(document.getElementById('origin'));
+					google.maps.events.addListener(autocomplete, 'place_changed', function(){
+					var places = autocomplete.getPlace();
+					var location = "<b>Location:</b>" places.formatted_address+ "</br>";
+					location += "<b>Latitude:</b>" + places.formatted_address.A + "<br/>";
+					location += "<b>Longitude:</b>" + places.geometry.location.F + "</br>";
+					document.getElementById('origin_location').innerHTML = location;
+		});
+		
+	};
             </script>
             <?php
                     if(!$failed){
