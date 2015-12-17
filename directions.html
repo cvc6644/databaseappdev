@@ -63,8 +63,8 @@
 			latitude =  places.geometry.location.A;
 			longitude = places.geometry.location.F;		
 		}
-	
-		function searchLocationNear(){
+		
+/*		function searchLocationNear(){
 			clearLocations();
 			getLongLat();
 			var radius = 25;
@@ -82,7 +82,7 @@
             createMarker(latlng);
 				}
 			}
-		}
+		}*/
 		function clearLocations() {
 			for (var i = 0; i < markers.length; i++) {
 				markers[i].setMap(null);
